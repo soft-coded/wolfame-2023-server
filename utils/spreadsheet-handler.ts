@@ -39,6 +39,23 @@ const codeToHostel = {
 	"h16-b": "Hostel 16",
 };
 
+export const sheetTitleToId = {
+	futsal: "0",
+	"tug-of-war": "302395988",
+	badminton: "1972649252",
+	"table-tennis": "170322891",
+	basketball: "1416124114",
+	volleyball: "1156816434",
+	cricket: "1597101565",
+	bgmi: "54114902",
+	valorant: "1356079247",
+	chess: "392768272",
+	carrom: "597517947",
+	powerlifting: "403514136",
+	fifa: "1638944088",
+	"strong-woman": "428866073",
+};
+
 const credentials = {
 	type: "service_account",
 	project_id: "wolfame-2023",
@@ -62,8 +79,7 @@ export default (async () => {
 	await spreadsheet.loadInfo();
 
 	async function getSortedList(event: string) {
-		event = event.toLowerCase();
-		const eventSheet = spreadsheet.sheetsByTitle[event];
+		const eventSheet = spreadsheet.sheetsById[sheetTitleToId[event]];
 		const sheetRows = await eventSheet.getRows();
 
 		const winners: string[] = [];

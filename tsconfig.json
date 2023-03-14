@@ -15,21 +15,13 @@
 		"sourceMap": false,
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUnusedLocals": false,
-		"noUnusedParameters": false,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
 		"noImplicitAny": false,
-		"noImplicitThis": false,
+		"noImplicitThis": true,
 		"strictNullChecks": true,
 		"outDir": "dist",
-		"baseUrl": ".",
-		"paths": {
-			"@server/*": ["src/*"],
-			"@tests/*": ["__tests__/*"],
-			"@config/*": ["src/config/*"],
-			"@domain/*": ["src/domain/*"],
-			"@controllers/*": ["src/controllers/*"],
-			"@middlewares/*": ["src/middlewares/*"]
-		}
+		"baseUrl": "."
 	},
 	"exclude": ["node_modules", "build"]
 }

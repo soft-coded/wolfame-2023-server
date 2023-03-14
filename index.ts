@@ -4,7 +4,6 @@ import cors from "cors";
 
 import router from "./routes";
 import { CustomError, handleError } from "./utils/error-handler";
-import gapi from "./utils/spreadsheet-handler";
 
 config();
 const app = express();
@@ -23,7 +22,3 @@ app.use("*", () => {
 app.use(handleError);
 
 app.listen(process.env.PORT || 5000, () => console.log("Server started"));
-
-(async () => {
-	console.log(await (await gapi).getSortedList("tug of war"));
-})();
