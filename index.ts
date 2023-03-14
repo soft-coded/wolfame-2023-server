@@ -1,17 +1,16 @@
 import { config } from "dotenv";
 import express from "express";
 import cors from "cors";
-import compression from "compression";
 
 import router from "./routes";
 import { CustomError, handleError } from "./utils/error-handler";
+import gapi from "./utils/spreadsheet-handler";
 
 config();
 const app = express();
 
 app.use(cors());
 app.use(express.json({ limit: "100mb" }));
-app.use(compression());
 
 app.use(router);
 
@@ -24,3 +23,7 @@ app.use("*", () => {
 app.use(handleError);
 
 app.listen(process.env.PORT || 5000, () => console.log("Server started"));
+
+(async () => {
+	console.log(await (await gapi).getSortedList("tug of war"));
+})();
