@@ -1,43 +1,6 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
 
-import { counter, counterToSortedList } from "./helpers";
-
-const codeToHostel = {
-	"wolf-a": "Wolfenden Hall",
-	"wolf-b": "Wolfenden Hall",
-	"rich-a": "Richardson Hall",
-	"rich-b": "Richardson Hall",
-	"sen-a": "Sen Hall",
-	"sen-b": "Sen Hall",
-	"mac-a": "MacDonald Hall",
-	"mac-b": "MacDonald Hall",
-	"sengupta-a": "Sengupta Hall",
-	"sengupta-b": "Sengupta Hall",
-	"lt-a": "Lt. Williams Hall",
-	"lt-b": "Lt. Williams Hall",
-	"pandya-a": "Pandya Hall",
-	"pandya-b": "Pandya Hall",
-	"nivedita-a": "Nivedita Hall",
-	"nivedita-b": "Nivedita Hall",
-	"h7-a": "Hostel 7",
-	"h7-b": "Hostel 7",
-	"h8-a": "Hostel 8",
-	"h8-b": "Hostel 8",
-	"h9-a": "Hostel 9",
-	"h9-b": "Hostel 9",
-	"h10-a": "Hostel 10",
-	"h10-b": "Hostel 10",
-	"h11-a": "Hostel 11",
-	"h11-b": "Hostel 11",
-	"h13-a": "PG Hostel 13",
-	"h13-b": "PG Hostel 13",
-	"h14-a": "Hostel 14",
-	"h14-b": "Hostel 14",
-	"h15-a": "Hostel 15",
-	"h15-b": "Hostel 15",
-	"h16-a": "Hostel 16",
-	"h16-b": "Hostel 16",
-};
+import { counter, counterToSortedList, getFullTeamName } from "./helpers";
 
 export const sheetTitleToId = {
 	futsal: "0",
@@ -78,18 +41,47 @@ export default (async () => {
 	await spreadsheet.useServiceAccountAuth(credentials);
 	await spreadsheet.loadInfo();
 
+	function getEventSheet(event: string) {
+		return spreadsheet.sheetsById[sheetTitleToId[event]];
+	}
+
 	async function getSortedList(event: string) {
-		const eventSheet = spreadsheet.sheetsById[sheetTitleToId[event]];
+		const eventSheet = getEventSheet(event);
 		const sheetRows = await eventSheet.getRows();
 
 		const winners: string[] = [];
-		sheetRows.forEach((row) => winners.push(codeToHostel[row.WINNER]));
+		sheetRows.forEach((row) => {
+			winners.push(getFullTeamName(row.WINNER));
+		});
 
 		return counterToSortedList(counter(winners));
+	}
+
+	async function getRecentMatches(event: string, limit: number) {
+		const eventSheet = getEventSheet(event);
+		let sheetRows = await eventSheet.getRows();
+
+		if (limit < sheetRows.length) {
+			sheetRows = sheetRows.slice(sheetRows.length - limit);
+		}
+
+		sheetRows.reverse();
+
+		const matchesList: [string, string, string][] = [];
+		sheetRows.forEach((row) => {
+			matchesList.push([
+				getFullTeamName(row["TEAM 1"], true),
+				getFullTeamName(row["TEAM 2"], true),
+				getFullTeamName(row.WINNER, true),
+			]);
+		});
+
+		return matchesList;
 	}
 
 	return {
 		spreadsheet,
 		getSortedList,
+		getRecentMatches,
 	};
 })();
