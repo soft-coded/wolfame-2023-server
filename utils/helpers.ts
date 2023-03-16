@@ -59,7 +59,7 @@ export function getFullPlayerName(code: string, name: string) {
 	const splitName = name.split(" ");
 	// capitalise the name
 	for (let i = 0; i < splitName.length; i++) {
-		splitName[i] = splitName[i][0].toUpperCase() + splitName[i].slice(1);
+		splitName[i] = splitName[i][0]?.toUpperCase() + splitName[i]?.slice(1);
 	}
 
 	name = splitName.join(" ");
