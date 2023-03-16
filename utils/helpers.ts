@@ -20,6 +20,7 @@ export const codeToHostel = {
 
 export function counter(arr: string[]) {
 	const count = {};
+	arr = arr.filter((val) => !!val.trim());
 
 	arr.forEach((val) => {
 		if (count[val] != null) {
@@ -44,6 +45,9 @@ export function counterToSortedList(counter: { [x: string]: number }) {
 }
 
 export function getFullTeamName(code: string, aOrB = false) {
+	code = code.trim();
+	if (!code) return "";
+
 	const splitCode = code.split("-");
 	let teamName = codeToHostel[splitCode[0]];
 
@@ -55,7 +59,10 @@ export function getFullTeamName(code: string, aOrB = false) {
 }
 
 export function getFullPlayerName(code: string, name: string) {
-	name = name.toLowerCase();
+	code = code.trim();
+	name = name.trim().toLowerCase();
+	if (!code || !name) return "";
+
 	const splitName = name.split(" ");
 	// capitalise the name
 	for (let i = 0; i < splitName.length; i++) {
