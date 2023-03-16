@@ -1,39 +1,3 @@
-/* export const codeToHostel = {
-	"wolf-a": "Wolfenden Hall",
-	"wolf-b": "Wolfenden Hall",
-	"rich-a": "Richardson Hall",
-	"rich-b": "Richardson Hall",
-	"sen-a": "Sen Hall",
-	"sen-b": "Sen Hall",
-	"mac-a": "MacDonald Hall",
-	"mac-b": "MacDonald Hall",
-	"sengupta-a": "Sengupta Hall",
-	"sengupta-b": "Sengupta Hall",
-	"lt-a": "Lt. Williams Hall",
-	"lt-b": "Lt. Williams Hall",
-	"pandya-a": "Pandya Hall",
-	"pandya-b": "Pandya Hall",
-	"nivedita-a": "Nivedita Hall",
-	"nivedita-b": "Nivedita Hall",
-	"h7-a": "Hostel 7",
-	"h7-b": "Hostel 7",
-	"h8-a": "Hostel 8",
-	"h8-b": "Hostel 8",
-	"h9-a": "Hostel 9",
-	"h9-b": "Hostel 9",
-	"h10-a": "Hostel 10",
-	"h10-b": "Hostel 10",
-	"h11-a": "Hostel 11",
-	"h11-b": "Hostel 11",
-	"h13-a": "PG Hostel 13",
-	"h13-b": "PG Hostel 13",
-	"h14-a": "Hostel 14",
-	"h14-b": "Hostel 14",
-	"h15-a": "Hostel 15",
-	"h15-b": "Hostel 15",
-	"h16-a": "Hostel 16",
-	"h16-b": "Hostel 16",
-}; */
 export const codeToHostel = {
 	wolf: "Wolfenden Hall",
 	rich: "Richardson Hall",
@@ -88,4 +52,18 @@ export function getFullTeamName(code: string, aOrB = false) {
 	}
 
 	return teamName;
+}
+
+export function getFullPlayerName(code: string, name: string) {
+	name = name.toLowerCase();
+	const splitName = name.split(" ");
+	// capitalise the name
+	for (let i = 0; i < splitName.length; i++) {
+		splitName[i] = splitName[i].charAt(0).toUpperCase() + splitName[i].slice(1);
+	}
+
+	name = splitName.join(" ");
+	name += ` (${codeToHostel[code]})`;
+
+	return name;
 }

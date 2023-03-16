@@ -1,6 +1,11 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
 
-import { counter, counterToSortedList, getFullTeamName } from "./helpers";
+import {
+	counter,
+	counterToSortedList,
+	getFullTeamName,
+	getFullPlayerName,
+} from "./helpers";
 
 export const sheetTitleToId = {
 	futsal: "0",
@@ -69,11 +74,29 @@ export default (async () => {
 
 		const matchesList: [string, string, string][] = [];
 		sheetRows.forEach((row) => {
-			matchesList.push([
-				getFullTeamName(row["TEAM 1"], true),
-				getFullTeamName(row["TEAM 2"], true),
-				getFullTeamName(row.WINNER, true),
-			]);
+			// if individual event, send the player names
+			// team events don't have "PLAYER" columns
+			if (row["TEAM 1 PLAYER"] != null) {
+				let winnerPlayer: string;
+				if (row.WINNER === row["TEAM 1"]) {
+					winnerPlayer = row["TEAM 1 PLAYER"];
+				} else {
+					winnerPlayer = row["TEAM 2 PLAYER"];
+				}
+
+				matchesList.push([
+					getFullPlayerName(row["TEAM 1"], row["TEAM 1 PLAYER"]),
+					getFullPlayerName(row["TEAM 2"], row["TEAM 2 PLAYER"]),
+					getFullPlayerName(row.WINNER, winnerPlayer),
+				]);
+			} else {
+				// if not an individual event, send the team names
+				matchesList.push([
+					getFullTeamName(row["TEAM 1"], true),
+					getFullTeamName(row["TEAM 2"], true),
+					getFullTeamName(row.WINNER, true),
+				]);
+			}
 		});
 
 		return matchesList;
